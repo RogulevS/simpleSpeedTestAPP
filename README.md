@@ -1,8 +1,7 @@
 # simpleSpeedTestAPP
 
-Приложение с двумя экранами, навигация по которым осуществляется с
-помощью NavigationBar (аналог SpeedTest)
-Приложение должно представлять из себя аналог SpeedTest. 
+Аналог SpeedTest
+Для работы приложения нужен доступ к местоположению  
 
 UIKit, SnapKit, CoreLocation, SpeedcheckerSDK
 
