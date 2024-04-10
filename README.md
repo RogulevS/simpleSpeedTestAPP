@@ -1,9 +1,9 @@
 # simpleSpeedTestAPP
 
 Аналог SpeedTest
-Для работы приложения нужен доступ к местоположению  
+Для работы приложения нужен доступ к геопозиции. Так же содержит экран настроек (выбор темы/ выбор отображаемой информации)
 
-UIKit, SnapKit, CoreLocation, SpeedcheckerSDK
+UIKit, SnapKit, CoreLocation, SpeedcheckerSDK, UserDefaults
 
 <img width="353" alt="Снимок экрана 2024-04-09 в 21 37 18" src="https://github.com/RogulevS/simpleSpeedTestAPP/assets/113042797/f8a433c7-ed9b-4d89-bb63-b5ba318c3150">
 <img width="362" alt="Снимок экрана 2024-04-09 в 21 34 56" src="https://github.com/RogulevS/simpleSpeedTestAPP/assets/113042797/608f835c-3f01-4da3-9840-5608d268f611">
