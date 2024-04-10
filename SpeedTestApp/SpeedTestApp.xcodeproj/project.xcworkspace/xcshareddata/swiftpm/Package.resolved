@@ -1,0 +1,24 @@
+{
+  "originHash" : "d8c7c5dad9672b9989bf772690419c105601a52ce334328b3b0a012934f9f70b",
+  "pins" : [
+    {
+      "identity" : "snapkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SnapKit/SnapKit.git",
+      "state" : {
+        "revision" : "2842e6e84e82eb9a8dac0100ca90d9444b0307f4",
+        "version" : "5.7.1"
+      }
+    },
+    {
+      "identity" : "speedchecker-sdk-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/speedchecker/speedchecker-sdk-ios",
+      "state" : {
+        "revision" : "b84f71781d2badf8e2825a8bdfa20b8ad855efb4",
+        "version" : "2.0.3"
+      }
+    }
+  ],
+  "version" : 3
+}

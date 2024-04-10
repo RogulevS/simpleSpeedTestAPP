@@ -1,0 +1,30 @@
+
+import Foundation
+
+enum Theme: Int {
+    case light, dark, system
+}
+
+class SettingsViewModel {
+    
+    var selectedTheme: Theme = .system {
+        didSet {
+            UserDefaults.standard.set(selectedTheme.rawValue, forKey: "selectedThemeKey")
+        }
+    }
+    
+    func selectTheme(index: Int) {
+        switch index {
+        case 0:
+            selectedTheme = .light
+        case 1:
+            selectedTheme = .dark
+        case 2:
+            
+            selectedTheme = .system
+        default:
+            break
+        }
+    }
+    
+}
