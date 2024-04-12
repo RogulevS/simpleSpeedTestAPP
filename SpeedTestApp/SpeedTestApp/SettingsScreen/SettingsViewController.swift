@@ -10,31 +10,32 @@ protocol ThemeSelectionDelegate: AnyObject {
 class SettingsViewController: UIViewController{
     
     // MARK: - Properties
-    weak var delegate: ThemeSelectionDelegate?
-    
-    let settingsViewModel = SettingsViewModel()
-    let themeKey = LocalConstants.selectedThemeKey
-    var selectedTheme: Theme = .light
-    var themeSelectionHandler: ((Theme) -> Void)?
-    var showDownloadSpeedSwitch: UISwitch!
-    var showUploadSpeedSwitch: UISwitch!
-    var showDownloadSpeed: Bool = true
-    var showUploadSpeed: Bool = true
-    var themeSelectionCallback: ((Theme) -> Void)?
-    var segmentedControlTheme = UISegmentedControl(items: [LocalConstants.segmentedControlThemeWhite,
+    weak var delegate: ThemeSelectionDelegate? // Слабая ссылка на делегата для обработки выбора темы
+    let settingsViewModel = SettingsViewModel() // ViewModel для управления настройками
+    let themeKey = LocalConstants.selectedThemeKey  // Ключ для сохранения выбранной темы
+    var selectedTheme: Theme = .light // Выбранная тема (по умолчанию светлая)
+    var themeSelectionHandler: ((Theme) -> Void)? // Обработчик выбора темы
+    var showDownloadSpeedSwitch: UISwitch! // Переключатель для отображения скорости загрузки
+    var showUploadSpeedSwitch: UISwitch! // Переключатель для отображения скорости выгрузки
+    var showDownloadSpeed: Bool = true // Флаги для отображения скорости загрузки
+    var showUploadSpeed: Bool = true // Флаги для отображения скорости выгрузки
+    var themeSelectionCallback: ((Theme) -> Void)? // Callback для выбора темы
+    var segmentedControlTheme = UISegmentedControl(items: [LocalConstants.segmentedControlThemeWhite, // SegmentedControl для выбора темы
                                                            LocalConstants.segmentedControlThemeDark,
                                                            LocalConstants.segmentedControlThemeLight])
     //MARK: - Lyfecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadSavedTheme()
-        setupLayout()
-        applyTheme()
-        savedSwitch()
+        
+        loadSavedTheme() // Загрузка сохраненной темы
+        setupLayout() // Настройка интерфейса
+        applyTheme() // Применение темы
+        savedSwitch() // Загрузка сохраненных настроек переключателей
     }
 }
-// MARK: - Setup layouts
+// MARK: - Private Methods
 private extension SettingsViewController {
+    // MARK: настройка интерфейса
     func setupLayout() {
         setupSegmentedControl()
         setupDownloadLable()
@@ -42,38 +43,37 @@ private extension SettingsViewController {
         setupDownloadSwitch()
         setupUploadSwitch()
     }
-    
+    // MARK: Настройка метки для отображения скорости загрузки
     func setupDownloadLable() {
         let showDownloadSpeedLabel = UILabel(frame: LocalConstants.setupDownloadLable)
         showDownloadSpeedLabel.text = LocalConstants.showDownloadSpeedLabel
         view.addSubview(showDownloadSpeedLabel)
     }
-    
+    // MARK: Настройка метки для отображения скорости выгрузки
     func setupUploadLable() {
         let showUploadSpeedLabel = UILabel(frame: LocalConstants.setupUploadLable)
         showUploadSpeedLabel.text = LocalConstants.showUploadSpeedLabel
         view.addSubview(showUploadSpeedLabel)
     }
-    
+    // MARK: Настройка переключателя для отображения скорости загрузки
     func setupDownloadSwitch() {
         showDownloadSpeedSwitch = UISwitch(frame: LocalConstants.setupDownloadSwitch)
-        
         view.addSubview(showDownloadSpeedSwitch)
     }
-    
+    // MARK: Настройка переключателя для отображения скорости выгрузки
     func setupUploadSwitch() {
         showUploadSpeedSwitch = UISwitch(frame: LocalConstants.setupUploadSwitch)
         showUploadSpeedSwitch.isOn = true
         view.addSubview(showUploadSpeedSwitch)
     }
-    
+    // MARK: загрузка сохраненных настроек переключателей
     func savedSwitch() {
         showDownloadSpeedSwitch.isOn = UserDefaults.standard.bool(forKey: LocalConstants.downloadSpeedSwitchState)
         showDownloadSpeedSwitch.addTarget(self, action: #selector(downloadSpeedSwitchChanged), for: .valueChanged)
         showUploadSpeedSwitch.isOn = UserDefaults.standard.bool(forKey: LocalConstants.uploadSpeedSwitchState)
         showUploadSpeedSwitch.addTarget(self, action: #selector(uploadSpeedSwitchChanged), for: .valueChanged)
     }
-    
+    // MARK: установка параметров и настроек для UISegmentedControl
     func setupSegmentedControl() {
         segmentedControlTheme.frame = CGRect(x: 20, y: 100, width: view.bounds.width - 40, height: 30)
         segmentedControlTheme.selectedSegmentIndex = selectedTheme.rawValue
@@ -83,10 +83,7 @@ private extension SettingsViewController {
 }
     // MARK: - Methods
 private extension SettingsViewController {
-    func themeSegmentedControlValueChanged(_ sender: UISegmentedControl) {
-        settingsViewModel.selectTheme(index: sender.selectedSegmentIndex)
-    }
-   
+    // MARK: вызывается при изменении значения UISegmentedControl
     @objc func segmentedControlValueChanged() {
         selectedTheme = Theme(rawValue: segmentedControlTheme.selectedSegmentIndex) ?? .light
         applyTheme()
@@ -95,26 +92,36 @@ private extension SettingsViewController {
             delegate.applyTheme(selectedTheme)
         }
     }
-
+    // MARK: применение выбранной темы
     func applyTheme() {
-        saveSelectedTheme()
-        
         switch selectedTheme {
         case .light:
             view.backgroundColor = .white
-        case .dark:
-            view.backgroundColor = .darkGray
-        case .system:
-            view.backgroundColor = .lightGray
-        }
-        saveSelectedTheme()
-        delegate?.applyTheme(selectedTheme) 
-    }
+            view.overrideUserInterfaceStyle = .light
     
+        case .dark:
+            view.backgroundColor = .black
+            view.overrideUserInterfaceStyle = .dark
+            
+           
+        case .system:
+            view.overrideUserInterfaceStyle = .unspecified
+            if view.backgroundColor == .white {
+                view.backgroundColor = .white
+                view.overrideUserInterfaceStyle = .light
+            } else {
+                view.backgroundColor = .black
+                view.overrideUserInterfaceStyle = .dark
+            }
+        }
+        saveSelectedTheme() // сохранение выбранной темы
+        delegate?.applyTheme(selectedTheme) // передаем через делегата
+    }
+    // MARK: сохраняет выбранную тему в UserDefaults по ключу
     func saveSelectedTheme() {
            UserDefaults.standard.set(selectedTheme.rawValue, forKey: themeKey)
        }
-
+    // MARK: загружает раннее сохраненную тему из UserDefaults по ключу
     func loadSavedTheme() {
         if let savedTheme = UserDefaults.standard.value(forKey: themeKey) as? Int {
             selectedTheme = Theme(rawValue: savedTheme) ?? .system
@@ -123,11 +130,12 @@ private extension SettingsViewController {
 }
 
 extension SettingsViewController {
+    // MARK: вызывается при изменении состояния переключателя загрузки
     @objc func downloadSpeedSwitchChanged(_ sender: UISwitch) {
         UserDefaults.standard.set(sender.isOn, forKey: LocalConstants.downloadSpeedSwitchState)
         delegate?.didToggleDownloadSpeed(sender.isOn)
     }
-    
+    // MARK: вызывается при изменении состояния переключателя выгрузки
     @objc func uploadSpeedSwitchChanged(_ sender: UISwitch) {
         UserDefaults.standard.set(sender.isOn, forKey: LocalConstants.uploadSpeedSwitchState)
         delegate?.didToggleUploadSpeed(sender.isOn)
@@ -151,3 +159,4 @@ extension SettingsViewController {
         static let setupUploadSwitch = CGRect(x: 20, y: 200, width: 50, height: 30)
     }
 }
+

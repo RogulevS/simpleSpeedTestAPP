@@ -2,30 +2,28 @@
 import Foundation
 
 class MainViewModel {
-
-    var mainModel: MainModel?
-    var loadingState: Bindable<Bool> = Bindable(false) 
-    var onSettingsButtonTapped: (() -> Void)?
-    var openSettingsScreen: (() -> Void)?
-    var isLoading: Bindable<Bool> = Bindable(false)
-    var selectedTheme: Theme = .system {
+    // MARK: - Properties
+    var mainModel: MainModel? //экземпляр модели
+    var onSettingsButtonTapped: (() -> Void)? // ответ на нажатие на кнопку настроек
+    var isLoading: Bindable<Bool> = Bindable(false) // отслеживание состояния загрузки
+    var selectedTheme: Theme = .light { // информация о выбранной теме
         didSet {
             applyTheme(selectedTheme)
         }
     }
-    
+    // MARK: связываем начало загрузки
     func startLoading() {
         isLoading.value = true
     }
-        
+    // MARK: связываем окончание загрузки
     func stopLoading() {
         isLoading.value = false
     }
-    
+    // MARK: обработка нажатия кнопки Настройки
     func handleSettingsButtonTapped() {
         onSettingsButtonTapped?()
        }
-       
+    // MARK: применение темы
     func applyTheme(_ theme: Theme) {
         switch theme {
         case .light:
@@ -36,12 +34,12 @@ class MainViewModel {
             break
         }
     }
-    
+    // MARK: запуск лоадера
     func startLoader() {
         mainModel?.loader.startAnimating()
         mainModel?.loader.isHidden = false
     }
-    
+    // MARK: остановка лоадера
     func stopLoader() {
         mainModel?.loader.stopAnimating()
         mainModel?.loader.isHidden = true

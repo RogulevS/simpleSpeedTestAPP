@@ -3,20 +3,22 @@ import UIKit
 import SpeedcheckerSDK
 import CoreLocation
 
-class NetworkLayer: UIViewController {
+class NetworkLayer: UIViewController, CLLocationManagerDelegate {
+    // MARK: - Properties
+    private var internetTest: InternetSpeedTest? // объект для тестирования скорости интернета
+    private var locationManager = CLLocationManager() // менеджер для работы с геолокацией
+    var downloadSpeed: Double = 0 // скорость загрузки
+    var uploadSpeed: Double = 0 // скорость выгрузки
     
-    private var internetTest: InternetSpeedTest?
-    private var locationManager = CLLocationManager()
-    var downloadSpeed: Double = 0
-    var uploadSpeed: Double = 0
-    
+    // MARK: - Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         requestLocationAuthorization()
     }
 }
-
+// MARK: - NetworkLayer Extension
 extension NetworkLayer {
+    // MARK: инициализация и запуск тестирования скорости интернета
     func runSpeedTestTouched() {
         internetTest = InternetSpeedTest(delegate: self)
         internetTest?.startFreeTest() { (error) in
@@ -25,7 +27,7 @@ extension NetworkLayer {
             }
         }
     }
-    
+    // MARK: запрос на авторизацию геолокации у пользователя
     func requestLocationAuthorization() {
         DispatchQueue.global().async {
             guard CLLocationManager.locationServicesEnabled() else {
@@ -41,18 +43,17 @@ extension NetworkLayer {
 }
 
 extension NetworkLayer: InternetSpeedTestDelegate {
-    
+    // обработка ошибок
     func internetTestError(error: SpeedTestError) {
         print("Error: \(error.rawValue)")
     }
-    
+    // передача результата теста
     func internetTestFinish(result: SpeedTestResult) {
         downloadSpeed = result.downloadSpeed.mbps
         uploadSpeed = result.uploadSpeed.mbps
-        print(downloadSpeed)
-        print(uploadSpeed)
     }
     
+    // MARK: методы делегата
     func internetTestReceived(servers: [SpeedTestServer]) {
     }
     
@@ -80,8 +81,5 @@ extension NetworkLayer: InternetSpeedTestDelegate {
     func internetTestUpload(progress: Double, speed: SpeedTestSpeed) {
         print("Upload: \(speed.descriptionInMbps)")
     }
-}
-
-extension NetworkLayer: CLLocationManagerDelegate {
 }
 

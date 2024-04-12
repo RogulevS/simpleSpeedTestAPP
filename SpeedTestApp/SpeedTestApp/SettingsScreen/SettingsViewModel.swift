@@ -1,6 +1,6 @@
 
 import Foundation
-
+// MARK: - перечесление с темами приложения
 enum Theme: Int {
     case light, dark, system
 }
@@ -9,10 +9,10 @@ class SettingsViewModel {
     
     var selectedTheme: Theme = .system {
         didSet {
-            UserDefaults.standard.set(selectedTheme.rawValue, forKey: "selectedThemeKey")
+            UserDefaults.standard.set(selectedTheme.rawValue, forKey: "selectedThemeKey") // сохраняем в UD
         }
     }
-    
+    // MARK: отслеживает выбранную тему приложения
     func selectTheme(index: Int) {
         switch index {
         case 0:
@@ -20,7 +20,6 @@ class SettingsViewModel {
         case 1:
             selectedTheme = .dark
         case 2:
-            
             selectedTheme = .system
         default:
             break

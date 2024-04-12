@@ -23,7 +23,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
     //MARK: - Lyfecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-    
+        
         settingsVC.delegate = self
         setupLayout()
         bindLoading()
@@ -42,25 +42,25 @@ private extension MainViewController {
         setupUploadSpeedLabel()
         setupLoader()
     }
-    
+    // MARK: задаем название тайтла и цвет
     func setupTitle() {
         title = LocalConstants.title
         view.backgroundColor = .white
     }
-    
+    // MARK: устанонавливаем менеджер для определения текущего местоположения юзера
     func setupLocationManager() {
         locationManager.delegate = self
         locationManager.startUpdatingLocation()
         locationManager.requestWhenInUseAuthorization()
     }
-    
+    // MARK: задаем кнопку настроек в навигации
     func setupSettingButton() {
         settingsButton.title = LocalConstants.settingsButtonTitle
         navigationItem.rightBarButtonItem = settingsButton
         settingsButton.action = #selector(pushSettingButton)
         settingsButton.target = self
     }
-
+    // MARK: добавляем кнопку "Проверки скорости" и задаем ее параметры
     func setupSpeedButton() {
         view.addSubview(speedButton)
         speedButton.setTitle(LocalConstants.speedButtonTitle, for: .normal)
@@ -79,7 +79,7 @@ private extension MainViewController {
             make.height.equalTo(LocalConstants.speedButtonWeidhHeight)
         })
     }
-    
+    // MARK: добавляем лейбл, на котором будет отображаться скорость загрузки
     func setupDownloadSpeedLabel() {
         view.addSubview(downloadSpeedLabel)
         
@@ -88,7 +88,7 @@ private extension MainViewController {
             make.top.equalTo(speedButton.snp.bottom).inset(LocalConstants.downloadSpeedLabelLoaderInset)
         }
     }
-    
+    // MARK: добавляем лейбл, на котором будет отображаться скорость выгрузки
     func setupUploadSpeedLabel() {
         view.addSubview(uploadSpeedLabel)
         
@@ -97,7 +97,7 @@ private extension MainViewController {
             make.top.equalTo(downloadSpeedLabel.snp.bottom).inset(LocalConstants.uploadSpeedLabelInset)
         }
     }
-    
+    // MARK: добавляем лоудер
     func setupLoader() {
         view.addSubview(loader)
         loader.isHidden = true
@@ -112,13 +112,14 @@ private extension MainViewController {
 }
 // MARK: - Methods
 extension MainViewController {
+    // MARK: обработка нажатия кнопки Настройки
     @objc func pushSettingButton() {
         viewModel.onSettingsButtonTapped = { [weak self] in
             self?.openSettingsScreen()
                 }
         viewModel.handleSettingsButtonTapped()
     }
-    
+    // MARK: запуск теста скорости
     @objc func runSpeedTestStart() {
         speedButton.isEnabled = false
         downloadSpeedLabel.text = ""
@@ -152,32 +153,38 @@ extension MainViewController {
 }
 // MARK: - Navigation method
 extension MainViewController {
+    // MARK: метод отвечающий за переход на экран Настроек
     func openSettingsScreen() {
         let settingsViewController = SettingsViewController()
         settingsViewController.delegate = self
-        navigationController?.pushViewController(settingsViewController, animated: true)  
+        navigationController?.pushViewController(settingsViewController, animated: true)
     }
 }
 // MARK: - Delegate
 extension MainViewController: ThemeSelectionDelegate {
+    // MARK: применение сохраненной темы оформления в приложении
     func applySavedTheme() {
         if let savedTheme = UserDefaults.standard.value(forKey: LocalConstants.selectedThemeKeyText) as? Int {
-            let selectedTheme = Theme(rawValue: savedTheme) ?? .light
+            let selectedTheme = Theme(rawValue: savedTheme) ?? .system
             applyTheme(selectedTheme)
         }
     }
-    
+    // MARK: применение конкретной темы: изменение цветовой схемы, установка соответствующих цветов для шрифтов
     func applyTheme(_ theme: Theme) {
         switch theme {
         case .light:
             view.backgroundColor = .white
+            view.overrideUserInterfaceStyle = .light
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
         case .dark:
-            view.backgroundColor = .darkGray
+            view.backgroundColor = .black
+            view.overrideUserInterfaceStyle = .dark
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         case .system:
-            view.backgroundColor = .lightGray
+            view.overrideUserInterfaceStyle = .unspecified
         }
     }
-
+    // MARK: состояние переключателей в приложении
     func applySavedToggles() {
         if let savedToggleDownload = UserDefaults.standard.bool(forKey: LocalConstants.keyDownloadSwitch) as? Bool {
             didToggleDownloadSpeed(savedToggleDownload)
@@ -197,16 +204,17 @@ extension MainViewController: ThemeSelectionDelegate {
 }
 // MARK: - loader binding
 extension MainViewController {
+    // MARK: запуск лоадера
     func startLoader() {
         loader.startAnimating()
         loader.isHidden = false
     }
-
+    // MARK: остановка лоадера
     func stopLoader() {
         loader.stopAnimating()
         loader.isHidden = true
     }
-    
+    // MARK: биндинг
     func bindLoading() {
         viewModel.isLoading.bind { [weak self] isLoading in
             DispatchQueue.main.async {
