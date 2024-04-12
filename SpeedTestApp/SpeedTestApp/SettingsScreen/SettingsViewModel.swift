@@ -9,7 +9,7 @@ class SettingsViewModel {
     
     var selectedTheme: Theme = .system {
         didSet {
-            UserDefaults.standard.set(selectedTheme.rawValue, forKey: "selectedThemeKey") // сохраняем в UD
+            UserDefaults.standard.set(selectedTheme.rawValue, forKey: LocalConstants.selectedThemeKey) // сохраняем в UD
         }
     }
     // MARK: отслеживает выбранную тему приложения
@@ -25,5 +25,10 @@ class SettingsViewModel {
             break
         }
     }
-    
+}
+// MARK: - Local constantnts
+extension SettingsViewModel {
+    enum LocalConstants {
+        static let selectedThemeKey = "selectedThemeKey"
+    }
 }

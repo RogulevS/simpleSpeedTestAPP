@@ -75,7 +75,7 @@ private extension SettingsViewController {
     }
     // MARK: установка параметров и настроек для UISegmentedControl
     func setupSegmentedControl() {
-        segmentedControlTheme.frame = CGRect(x: 20, y: 100, width: view.bounds.width - 40, height: 30)
+        segmentedControlTheme.frame = CGRect(x: LocalConstants.segmentedControlThemeX, y: LocalConstants.segmentedControlThemeY, width: view.bounds.width - LocalConstants.segmentedControlThemeWidth, height: LocalConstants.segmentedControlThemeHeight)
         segmentedControlTheme.selectedSegmentIndex = selectedTheme.rawValue
         segmentedControlTheme.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
         view.addSubview(segmentedControlTheme)
@@ -103,7 +103,6 @@ private extension SettingsViewController {
             view.backgroundColor = .black
             view.overrideUserInterfaceStyle = .dark
             
-           
         case .system:
             view.overrideUserInterfaceStyle = .unspecified
             if view.backgroundColor == .white {
@@ -157,6 +156,10 @@ extension SettingsViewController {
         static let setupUploadLable = CGRect(x: 80, y: 200, width: 250, height: 30)
         static let setupDownloadSwitch = CGRect(x: 20, y: 150, width: 50, height: 30)
         static let setupUploadSwitch = CGRect(x: 20, y: 200, width: 50, height: 30)
+        static let segmentedControlThemeX: CGFloat = 20
+        static let segmentedControlThemeY: CGFloat = 100
+        static let segmentedControlThemeWidth: CGFloat = 40
+        static let segmentedControlThemeHeight: CGFloat = 30
     }
 }
 

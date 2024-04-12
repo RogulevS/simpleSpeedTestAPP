@@ -45,7 +45,7 @@ extension NetworkLayer {
 extension NetworkLayer: InternetSpeedTestDelegate {
     // обработка ошибок
     func internetTestError(error: SpeedTestError) {
-        print("Error: \(error.rawValue)")
+        print("\(LocalConstants.errorText) \(error.rawValue)")
     }
     // передача результата теста
     func internetTestFinish(result: SpeedTestResult) {
@@ -58,8 +58,8 @@ extension NetworkLayer: InternetSpeedTestDelegate {
     }
     
     func internetTestSelected(server: SpeedTestServer, latency: Int, jitter: Int) {
-        print("Latency: \(latency)")
-        print("Jitter: \(jitter)")
+        print("\(LocalConstants.latencyText) \(latency)")
+        print("\(LocalConstants.jitterText) \(jitter)")
     }
     
     func internetTestDownloadStart() {
@@ -69,7 +69,7 @@ extension NetworkLayer: InternetSpeedTestDelegate {
     }
     
     func internetTestDownload(progress: Double, speed: SpeedTestSpeed) {
-        print("Download: \(speed.descriptionInMbps)")
+        print("\(LocalConstants.downloadText) \(speed.descriptionInMbps)")
     }
     
     func internetTestUploadStart() {
@@ -79,7 +79,16 @@ extension NetworkLayer: InternetSpeedTestDelegate {
     }
     
     func internetTestUpload(progress: Double, speed: SpeedTestSpeed) {
-        print("Upload: \(speed.descriptionInMbps)")
+        print("\(LocalConstants.uploadText) \(speed.descriptionInMbps)")
     }
 }
-
+// MARK: - Local constantnts
+extension NetworkLayer {
+    enum LocalConstants {
+        static let errorText = "Error:"
+        static let latencyText = "Latency:"
+        static let jitterText = "Jitter:"
+        static let downloadText = "Download:"
+        static let uploadText = "Upload:"
+    }
+}

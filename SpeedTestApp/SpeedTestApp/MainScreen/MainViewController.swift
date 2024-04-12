@@ -127,7 +127,7 @@ extension MainViewController {
         network.runSpeedTestTouched()
         viewModel.isLoading.value = true
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 25) { [self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + LocalConstants.timeWaiting) { [self] in
             self.viewModel.isLoading.value = false
             self.speedButton.isEnabled = true
             if settingsVC.showDownloadSpeed == true && settingsVC.showUploadSpeed == true {
@@ -243,9 +243,9 @@ extension MainViewController {
         static let numberOfLines = 2
         static let cornerRadius: CGFloat = 125
         static let systemFont: CGFloat = 20
+        static let timeWaiting: CGFloat = 25
         static let speedButtonWeidhHeight = 250
         static let downloadSpeedLabelLoaderInset = -40
         static let uploadSpeedLabelInset = -20
-        
     }
 }
