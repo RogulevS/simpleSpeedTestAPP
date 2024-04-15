@@ -182,6 +182,7 @@ extension MainViewController: ThemeSelectionDelegate {
             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         case .system:
             view.overrideUserInterfaceStyle = .unspecified
+            view.backgroundColor = .systemBackground
         }
     }
     // MARK: состояние переключателей в приложении

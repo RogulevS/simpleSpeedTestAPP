@@ -98,20 +98,14 @@ private extension SettingsViewController {
         case .light:
             view.backgroundColor = .white
             view.overrideUserInterfaceStyle = .light
-    
+            
         case .dark:
             view.backgroundColor = .black
             view.overrideUserInterfaceStyle = .dark
             
         case .system:
             view.overrideUserInterfaceStyle = .unspecified
-            if view.backgroundColor == .white {
-                view.backgroundColor = .white
-                view.overrideUserInterfaceStyle = .light
-            } else {
-                view.backgroundColor = .black
-                view.overrideUserInterfaceStyle = .dark
-            }
+            view.backgroundColor = .systemBackground
         }
         saveSelectedTheme() // сохранение выбранной темы
         delegate?.applyTheme(selectedTheme) // передаем через делегата
